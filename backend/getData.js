@@ -36,7 +36,7 @@ async function executeModifyingQuery(req, res)
     }
     catch(err)
     {
-        console.log(err);
+        console.error(err);
         // res.json({error: err})
     }
 }
@@ -53,7 +53,7 @@ async function executeSelectQuery(req, res)
     }
     catch(e)
     {
-        console.log(e);
+        console.error(e);
     }
 }
 
