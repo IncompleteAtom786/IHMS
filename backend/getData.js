@@ -1,7 +1,6 @@
 import db from "./database.js"
 
-async function getTableNameFromDB()
-{
+async function getTableNameFromDB() {
     var tableNames = await db.query("SELECT tablename FROM pg_catalog.pg_tables where schemaname='public'");
     tableNames = tableNames.rows;
     tableNames = tableNames.map((t) => {
@@ -15,47 +14,48 @@ async function getTableNameFromDB()
 
 async function giveDataAndTablesToFrontend(req, res) {
 
-    var tableToSend = await getTableNameFromDB();
-    var dataToSend = [];
-    for (let i = 0; i < tableToSend.length; i++) {
-        dataToSend.push((await db.query(`select * from ${tableToSend[i]}`)).rows);
+    var tableNames = await getTableNameFromDB();
+
+    var tableDataToSend = [];
+    for (let i = 0; i < tableNames.length; i++) 
+    {
+        const tableDataDB = (await db.query(`select * from ${tableNames[i]}`)).rows;
+        tableDataToSend.push({
+            tableName: tableNames[i].toString(),
+            tableData: tableDataDB
+        });
+        // console.log(tableDataDB);
     }
 
-    // console.log(dataToSend[0][0]);
-    res.json({tableName: tableToSend, tableData: dataToSend});
+    res.json({tableDataToSend: tableDataToSend});
 }
 
-async function executeModifyingQuery(req, res)
-{
+async function executeModifyingQuery(req, res) {
     const query = req.body.sentQuery;
     // console.log(query);
 
-    try
-    {
+    try {
         await db.query(`${query}`)
     }
-    catch(err)
-    {
+    catch (err) {
         console.error(err);
         // res.json({error: err})
     }
 }
 
-async function executeSelectQuery(req, res)
-{
+async function executeSelectQuery(req, res) {
     const query = req.body.sentQuery;
     // console.log(query);
 
-    try{
+    try {
         const dataToSend = await db.query(`${query}`);
         // console.log(dataToSend.rows)
         res.json(dataToSend.rows);
     }
-    catch(e)
-    {
+    catch (e) {
         console.error(e);
     }
 }
 
 
-export {giveDataAndTablesToFrontend, executeModifyingQuery, executeSelectQuery};
+export { giveDataAndTablesToFrontend, executeModifyingQuery, executeSelectQuery };
