@@ -1,0 +1,202 @@
+*{
+  margin: 0px;
+  padding: 0px;
+  color: #14a76c;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+body{
+  margin: 0px;
+  width: 100%;
+  height: 100%;
+  background-color: #08085b;
+  padding: 0px;
+  font-family: cursive;
+}
+
+caption{
+  font-weight: bolder;
+  margin-left: 10px;
+  width: max-content;
+  color: #ffffff;
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.data{
+  display: flex;
+  flex-direction: column;
+  width: 100;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 10px;
+}
+
+table, th,td{
+  border-collapse: collapse;
+  border-spacing: 0px;
+  text-align: center;
+  color: #F6F5F5;
+  font-family: "Montserrat";
+  font-size: 1em;
+  padding: 5px;
+  width: fit-content;
+  height: fit-content;
+  border: 3px solid #ffc800;
+  align-self: flex-start;
+}
+
+table{
+  margin-bottom: 30px;
+}
+
+th{
+  font-size: 1.1em;
+  font-weight: 10000;
+  background-color: #35374B;
+  max-width: max-content;
+}
+
+td{
+  background-color: #78A083;
+  color: #000000;
+  font-weight: 500;
+  max-width: min-content;
+}
+
+.change, .select{
+  display: flex;
+  flex-direction: row;
+  width: 100;
+  height: fit-content;
+  align-items: center;
+  justify-content: space-evenly;
+  background-color: #5a152b;
+  padding: 5px;
+  margin: 10px;
+  border-radius: 15px;
+}
+
+.output{
+  background-color: #802bb1;
+  border: 5px solid black;
+  border-radius: 10px;
+  margin: 10px;
+  min-width: calc(100% - 30px);
+  height: fit-content;
+  width: fit-content;
+}
+
+
+.output > table{
+  align-self: center;
+  justify-content: center;
+  padding: 10px;
+  margin: 10px;
+}
+
+.change > button, .select > button{
+  height: fit-content;
+  padding: 10px;
+  border: 5px solid rgb(128, 0, 255);
+  color: black;
+  background-color: #d79922;
+  border-radius: 5px;
+  font-size: 25px;
+  font-family:'Times New Roman', Times, serif;
+  font-weight: bold; 
+}
+
+button:hover{
+  cursor: pointer;
+}
+
+.change > textarea, .select > textarea {
+  height: 200px;
+  width: 600px;
+  min-width: 300px;
+  padding: 10px;
+  margin: 20px;
+  line-height: 2;
+  font-size: 25px;
+  text-align: left;
+  align-self: center;
+  justify-content: center;
+  font-family:serif;
+  background-color: #003135;
+  color: #afdde5;
+  resize: none;
+  border: 5px solid black;
+  border-radius: 10px;
+}
+
+
+textarea::placeholder{
+  color: #afdde5;
+}
+
+.output{
+  align-content: center;
+}
+
+h2{
+  color: #fbe9d0;
+  text-align: justify;
+  width: 500px;
+  justify-self:left;
+  height: fit-content;
+  padding: 10px;
+  margin: 10px;
+  line-height: 1.5;
+  align-self: center;
+  font-size: 27px;
+  font-family: Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+h1{
+  align-self: first baseline;
+  padding: 20px;
+  color: #1c1a1a;
+  opacity: 1;
+}
+
+select, option{
+  height: fit-content;
+  width: fit-content;
+  padding: 15px;
+  color: #000;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  background-color: #d79922;
+  font-size: 20px;
+  border: 4px solid wheat;
+  border-radius: 10px;
+  margin: 20px;
+}
+
+.show1{
+  display: flex;
+  flex-direction: column;
+  align-content: left;
+  width: 100%;
+}
+
+.choice{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+input
+{
+  background-color: #000000;
+  height: 40px;
+  width: 40px;
+  margin: 30px 10px 40px 0px;
+}
+
+label{
+  font-family: monospace;
+  font-size: 30px;
+  margin-top: 30px;
+  font-weight: 1000;
+  margin-bottom: 40px;
+}
