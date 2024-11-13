@@ -1,18 +1,29 @@
 import React from "react";
+import PatientForm from "./Forms/Patient";
 
 function Show1(props) {
   const { tables } = props;
   const [selectedTableData, setSelectedTable] = React.useState([{}]);
+  const [selectForm, setSelectForm] = React.useState(<></>);
 
   function showTable(event) {
     const tName = event.target.value.toString();
-    // console.log(tName);
+    console.log(tName);
 
     tables.forEach((element) => {
       if (element.tableName === tName) setSelectedTable(element.tableData);
     });
 
     if (tName === "") setSelectedTable([{}]);
+  }
+
+  function showAddForm(event) {
+    const tName = event.target.value.toString();
+    if (tName === "patient") {
+      setSelectForm(<PatientForm />)
+    };
+    //rest of the forms can be added here as else if
+    console.log(tName);
   }
 
   return (
@@ -25,6 +36,19 @@ function Show1(props) {
           </option>
         ))}
       </select>
+
+      <select onChange={showAddForm}>
+        <option value=""> -- Please Select A Table To Insert Values -- </option>
+        {tables.map((tItem, index) => (
+          <option value={tItem.tableName} key={index}>
+            {String(tItem.tableName).toUpperCase()}
+          </option>
+        ))}
+      </select>
+
+      {
+        selectForm
+      }
 
       {
         <table>

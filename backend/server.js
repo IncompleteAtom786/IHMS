@@ -7,7 +7,7 @@ const server = express();
 const port = 8383;
 
 server.use(bodyParser.json());
-server.use(bodyParser.urlencoded({extended: false}));
+server.use(bodyParser.urlencoded({ extended: false }));
 
 const corsOption = {
     origin: '*',
@@ -17,7 +17,7 @@ const corsOption = {
 
 server.use(cors(corsOption));
 
-server.get("/", router);
+server.use("/", router);
 
 server.listen(port, () => {
     console.log(`Server is running on Port : ${port}!`);
