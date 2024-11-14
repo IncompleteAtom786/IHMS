@@ -1,53 +1,33 @@
-import React, { useEffect } from "react";
-import Table from "./Components/Table";
-import Change from "./Components/Change";
-import Select from "./Components/Select";
-import Show2 from "./Components/Show2";
-import Show1 from "./Components/Show1";
+import './App.css'
+import { Route, Routes } from 'react-router-dom'
+import AppointmentForm from "./pages/Appointment"
+import BillForm from "./pages/Bill"
+import PatientForm from "./pages/Patient"
+import PrescriptionForm from "./pages/Prescription"
+import RoomForm from "./pages/Room"
+import StaffForm from "./pages/Staff"
+import MedicineForm from "./pages/Medicine"
+import Home from "./pages/Home"
+
+import Navbar from './components/Navbar'
 
 function App() {
-	const baseURL = "http://localhost:8383";
-    const [table, setTable] = React.useState([{}]);
-    const [display, setDisplay] = React.useState();
-    const [checked, setChecked] = React.useState(false);
 
-	useEffect( () => {
-		async function getTable() {
-            try {
-                const tableDataFromServer = await fetch(baseURL + "/", {
-                    method: "GET"
-                });
-                const data = await tableDataFromServer.json();
-                setTable(data.tableDataToSend || [{}])
-
-                setDisplay(checked ?
-                    <Show2
-                        tables={table}
-                    /> :
-                    <Show1
-                        tables={table}
-                    />)
-            }
-            catch (err) {
-                console.error("Try to run the Server!!")
-            }
-        }
-        getTable();
-	}, [table, checked])
-	
-	return <div className="tableContainer">
-	 	<Table 
-		baseURL={baseURL}
-		display = {display}
-		setChecked={setChecked}
-		/>
-		<Change 
-		baseURL = {baseURL}
-		/>
-		<Select 
-		baseURL = {baseURL}
-		/>
-	</div>
+  return (
+    <>
+      <Navbar/>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/appointment" element={<AppointmentForm />} />
+        <Route path="/bill" element={<BillForm />} />
+        <Route path="/patient" element={<PatientForm />} />
+        <Route path="/prescription" element={<PrescriptionForm />} />
+        <Route path="/room" element={<RoomForm />} />
+        <Route path="/staff" element={<StaffForm />} />
+        <Route path="/medicine" element={<MedicineForm />} />
+      </Routes>
+    </>
+  )
 }
 
-export default App;
+export default App
