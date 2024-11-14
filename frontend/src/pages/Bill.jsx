@@ -25,9 +25,11 @@ function BillForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://localhost:8383/bill", billData);
-            console.log("Bill data submitted successfully:", response.data);
-            setBills([...bills, billData]);
+            await axios.post("http://localhost:8383/bill",{
+                params: {
+                    billData
+                }
+            });
             setBillData({
                 Payment_ID: "",
                 Date: "",
@@ -38,23 +40,31 @@ function BillForm() {
                 Total: "",
                 Patient_ID: ""
             });
-            setBills(response.data);
+            fetchData();
         } catch (error) {
             console.error("Error submitting bill data:", error);
         }
     };
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get("http://localhost:8383/bill");
-                setBills(response.data);
-            } catch (error) {
-                console.error("Error fetching bill data:", error);
-            }
+    const fetchData = async () => {
+        try {
+            const response = await axios.get("http://localhost:8383/bill?tableName=bill");
+            // console.log(response);
+            setBills(response.data.tableData);
+        } catch (error) {
+            console.error("Error fetching bill data:", error);
         }
+    };
+
+    const deleteData = async (primaryKey) => {
+        try {
+            await axios.delete(`http://localhost:8383/bill?tableName=bill&primaryKey=${primaryKey}`);
+            fetchData();
+        } catch (error) {
+            console.error("Error deleting bill data:", error);
+        }
+    };
+    useEffect(() => {
         fetchData();
-        
     },[]);
 
     return (
@@ -181,12 +191,8 @@ function BillForm() {
                 <div className="p-10 w-fit h-fit flex flex-col">
                     <Table
                         columns={["Payment ID", "Date", "Room Cost", "Test Cost", "Other Charges", "Medicine Cost", "Total", "Patient ID"]}
-                        data={
-                            [
-                                ["1", "2023-10-01", "100.00", "50.00", "20.00", "30.00", "200.00", "101"],
-                                ["2", "2023-10-02", "150.00", "60.00", "25.00", "35.00", "270.00", "102"]
-                            ]
-                        }
+                        data={bills}
+                        deleteFunction={deleteData}
                     />
                 </div>
             </div>
