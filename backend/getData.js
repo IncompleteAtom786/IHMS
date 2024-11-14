@@ -1,62 +1,71 @@
 import db from "./database.js"
 
-async function getTableNameFromDB() {
-    var tableNames = await db.query("SELECT tablename FROM pg_catalog.pg_tables where schemaname='public'");
-    // console.log(tableNames);
-    tableNames = tableNames.rows;
-    tableNames = tableNames.map((t) => {
-        return Object.values(t).map((i) => {
-            return i;
-        })
-    });
-
-    return tableNames;
+const p_key = {
+    bill: "Payment_ID",
+    patient: "Patient_ID",
+    room: "Room_ID",
+    medicine: "Medicine_ID",
+    appointment: "Appointment_ID",
+    prescription: "Prescription_ID",
+    staff: "Emp_ID"
 }
 
-async function giveDataAndTablesToFrontend(req, res) {
-
-    var tableNames = await getTableNameFromDB();
-
+async function getTableData(req, res) {
+    const tableName = req.query.tableName;
     var tableDataToSend = [];
-    for (let i = 0; i < tableNames.length; i++) 
-    {
-        const tableDataDB = (await db.query(`select * from ${tableNames[i]};`)).rows;
-        tableDataToSend.push({
-            tableName: tableNames[i].toString(),
-            tableData: tableDataDB
-        });
-        // console.log(tableDataDB);
-    }
+    const tableDataDB = (await db.query(`select * from ${tableName};`)).rows;
 
-    res.json({tableDataToSend: tableDataToSend});
+    tableDataDB.forEach(element => {
+        tableDataToSend.push(Object.values(element).map(value => value.toString()));
+    });
+    // console.log(tableDataToSend);
+
+    res.json({tableData: tableDataToSend});
+    // res.json({msg: "Hello from getData.js!"});
 }
 
-async function executeModifyingQuery(req, res) {
-    const query = req.body.sentQuery;
-    // console.log(query);
+async function postBillData(req, res) {
+    const {
+        Payment_ID,
+        Date,
+        Room_Cost,
+        Test_Cost,
+        Other_Charges,
+        M_Cost,
+        Total,
+        Patient_ID
+     } = req.body.params.billData;
 
-    try {
-        await db.query(`${query}`)
+    try{
+        await db.query(`insert into bill values(
+            ${Payment_ID},
+            '${Date}',
+            ${Room_Cost},
+            ${Test_Cost},
+            ${Other_Charges},
+            ${M_Cost},
+            ${Total},
+            ${Patient_ID}
+        );`)
+    }catch(e){
+        console.log(e);
     }
-    catch (err) {
-        console.error(err);
-        // res.json({error: err})
+
+    res.json({msg:"Success"});
+}
+async function deleteData(req, res) {
+    const tableName = req.query.tableName;
+    const primaryKey = req.query.primaryKey;
+
+    try{
+        await db.query(`delete from ${tableName} where ${p_key[tableName]} = ${primaryKey};`);
+    }catch(e){
+        console.log(e);
     }
+
+    res.json({msg:"Successfully deleted"});
 }
 
-async function executeSelectQuery(req, res) {
-    const query = req.body.sentQuery;
-    // console.log(query);
-
-    try {
-        const dataToSend = await db.query(`${query}`);
-        // console.log(dataToSend.rows)
-        res.json(dataToSend.rows);
-    }
-    catch (e) {
-        console.error(e);
-    }
-}
 
 
-export { giveDataAndTablesToFrontend, executeModifyingQuery, executeSelectQuery };
+export { getTableData , postBillData, deleteData};

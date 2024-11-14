@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
-import router from "./routers.js";
+import billRouter from "./routers.js";
 
 const server = express();
 const port = 8383;
@@ -17,7 +17,7 @@ const corsOption = {
 
 server.use(cors(corsOption));
 
-server.use("/", router);
+server.use("/bill", billRouter);
 
 server.listen(port, () => {
     console.log(`Server is running on Port : ${port}!`);
