@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-const Table = ({ columns, data }) => {
+const Table = ({ columns, data, deleteFunction }) => {
     return (
         <div className="overflow-x-auto">
             <table className="min-w-full border border-gray-200 rounded-xl overflow-hidden">
@@ -11,6 +11,9 @@ const Table = ({ columns, data }) => {
                                 {column}
                             </th>
                         ))}
+                        <th className="px-4 py-2 text-left text-blue-500">
+                            Action
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -21,6 +24,11 @@ const Table = ({ columns, data }) => {
                                     {cell}
                                 </td>
                             ))}
+                            <td>
+                                <button className="text-red-500" onClick={()=> {
+                                    deleteFunction(row[0]);
+                                }}>Delete</button>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
@@ -31,6 +39,7 @@ const Table = ({ columns, data }) => {
 Table.propTypes = {
     columns: PropTypes.arrayOf(PropTypes.string).isRequired,
     data: PropTypes.arrayOf(PropTypes.array).isRequired,
+    deleteFunction: PropTypes.func.isRequired
 };
 
 export default Table;
