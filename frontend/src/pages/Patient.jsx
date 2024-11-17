@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import Table from "../components/Table";
+import axios from "axios";
+
 function PatientForm() {
     const [patientData, setPatientData] = useState({
         Patient_ID: "",
@@ -13,6 +15,7 @@ function PatientForm() {
         Discharge_Date: "",
         Phone: ""
     });
+    const [patients, setPatients] = useState([]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -25,22 +28,50 @@ function PatientForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch("http://localhost:8383/patient", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(patientData)
+            await axios.post("http://localhost:8383/patient", {
+                params: {
+                    patientData
+                }
             });
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
-            console.log("Patient data submitted successfully:", data);
+            setPatientData({
+                Patient_ID: "",
+                Patient_Fname: "",
+                Patient_Lname: "",
+                Blood_type: "",
+                Email: "",
+                Gender: "",
+                Condition: "",
+                Admission_Date: "",
+                Discharge_Date: "",
+                Phone: ""
+            });
+            fetchData();
         } catch (error) {
-            console.error("Error submitting patient data:", error);
+            console.error("Error submitting bill data:", error);
         }
     };
+
+    const fetchData = async () => {
+        try {
+            const response = await axios.get("http://localhost:8383/patient?tableName=patient");
+            // console.log(response);
+            setPatients(response.data.tableData);
+        } catch (error) {
+            console.error("Error fetching patients data:", error);
+        }
+    };
+
+    const deleteData = async (primaryKey) => {
+        try {
+            await axios.delete(`http://localhost:8383/patient?tableName=patient&primaryKey=${primaryKey}`);
+            fetchData();
+        } catch (error) {
+            console.error("Error deleting patient data:", error);
+        }
+    };
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     return (
         <>
@@ -185,13 +216,9 @@ function PatientForm() {
                 <h2 className="text-2xl">Patient Table</h2>
                 <div className="p-10 w-fit h-fit flex flex-col">
                     <Table
-                        columns={["Patient ID", "Patient Name", "Blood Type", "Email", "Gender", "Condition", "Admission Date", "Discharge Date", "Phone"]}
-                        data={
-                            [
-                                ["1", "John Doe", "O+", "johndoe@gmail.com","Male", "Covid-19", "2021-09-01", "2021-09-10", "1234567890"],
-                                ["2", "Jane Doe", "AB-", "janedoe@gmail.com", "Female", "Covid-19", "2021-09-01", "2021-09-10", "1234567890"]
-                            ]
-                        }
+                        columns={["Patient ID", "First Name","Last Name", "Blood Type", "Email", "Gender", "Condition", "Admission Date", "Discharge Date", "Phone"]}
+                        data={patients}
+                        deleteFunction={deleteData}
                     />
                 </div>
             </div>

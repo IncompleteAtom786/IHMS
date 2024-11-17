@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Table from "../components/Table";
 import axios from "axios";
 function BillForm() {
+    const [toEdit, setToEdit] = useState(false);
     const [billData, setBillData] = useState({
         Payment_ID: "",
         Date: "",
@@ -25,9 +26,9 @@ function BillForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post("http://localhost:8383/bill",{
+            await axios.post(`http://localhost:8383/bill?edit=${toEdit}`,{
                 params: {
-                    billData
+                    billData,
                 }
             });
             setBillData({
@@ -63,6 +64,20 @@ function BillForm() {
             console.error("Error deleting bill data:", error);
         }
     };
+
+    const editData = async (row, editOrNot) => {
+        setToEdit(editOrNot);
+        setBillData({
+            Payment_ID: row[0],
+            Date: row[1],
+            Room_Cost: row[2],
+            Test_Cost: row[3],
+            Other_Charges: row[4],
+            M_Cost: row[5],
+            Total: row[6],
+            Patient_ID: row[7]
+        });
+    }
     useEffect(() => {
         fetchData();
     },[]);
@@ -193,6 +208,7 @@ function BillForm() {
                         columns={["Payment ID", "Date", "Room Cost", "Test Cost", "Other Charges", "Medicine Cost", "Total", "Patient ID"]}
                         data={bills}
                         deleteFunction={deleteData}
+                        editFunction={editData}
                     />
                 </div>
             </div>
